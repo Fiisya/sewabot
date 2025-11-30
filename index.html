@@ -2,9 +2,12 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Sewa Bot WhatsApp Premium</title>
+  <title>Yuzuriha WhatsApp Bot</title>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  <!-- Particles.js CSS -->
+  <link href="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.css" rel="stylesheet" />
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -12,22 +15,23 @@
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #ebf4ff 0%, #e0e7ff 100%);
-      color: #1f2937;
+      background-color: #111827; /* Gray-900, a very dark gray */
+      color: #f9fafb; /* Gray-50, almost white */
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      line-height: 1.5;
+      line-height: 1.6;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
     a {
       text-decoration: none;
       color: inherit;
     }
     a:focus-visible {
-      outline: 2px solid #2563eb;
+      outline: 2px solid #9ca3af; /* Gray-400 */
       outline-offset: 2px;
     }
     img {
@@ -49,7 +53,7 @@
       cursor: pointer;
     }
     button:focus-visible {
-      outline: 2px solid #2563eb;
+      outline: 2px solid #9ca3af; /* Gray-400 */
       outline-offset: 2px;
     }
     .container {
@@ -155,13 +159,18 @@
       gap: 2rem;
     }
     header {
-      background: linear-gradient(90deg, #2563eb 0%, #4f46e5 100%);
+      background-color: #111827; /* Gray-900 */
       color: white;
       padding: 1.25rem 1.5rem;
       position: sticky;
       top: 0;
       z-index: 50;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+    }
+    header.scrolled {
+      padding: 0.75rem 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
     header .container {
       display: flex;
@@ -177,8 +186,12 @@
       background-color: white;
       padding: 0.5rem;
       border-radius: 9999px;
-      box-shadow: 0 2px 8px rgb(0 0 0 / 0.15);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
       flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .logo-bg:hover {
+      transform: rotate(360deg);
     }
     .logo-bg img {
       border-radius: 9999px;
@@ -190,6 +203,21 @@
       font-size: 1.5rem;
       font-weight: 700;
       user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    header h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background-color: white;
+      transition: width 0.3s ease;
+    }
+    header h1:hover::after {
+      width: 100%;
     }
     #burgerBtn {
       font-size: 1.5rem;
@@ -198,6 +226,13 @@
       border: none;
       cursor: pointer;
       display: block;
+      transition: transform 0.3s ease;
+    }
+    #burgerBtn:hover {
+      transform: scale(1.1);
+    }
+    #burgerBtn:active {
+      transform: scale(0.95);
     }
     @media (min-width: 768px) {
       #burgerBtn {
@@ -210,7 +245,7 @@
       left: 0;
       width: 16rem;
       height: 100vh;
-      background: linear-gradient(90deg, #2563eb 0%, #4f46e5 100%);
+      background-color: #111827; /* Gray-900 */
       color: white;
       transform: translateX(-100%);
       transition: transform 0.3s ease-in-out;
@@ -229,19 +264,40 @@
       padding-right: 1.5rem;
       margin: 0;
     }
+    nav ul li {
+      position: relative;
+      overflow: hidden;
+    }
     nav ul li a {
       display: block;
       padding: 0.5rem 0.5rem;
       border-radius: 0.375rem;
       font-weight: 600;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
       user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+    nav ul li a::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+    nav ul li a:hover::before {
+      left: 0;
     }
     nav ul li a:hover,
     nav ul li a:focus-visible {
-      background-color: #1e40af;
+      background-color: rgba(255, 255, 255, 0.1);
       text-decoration: underline;
       outline: none;
+      transform: translateX(5px);
     }
     @media (min-width: 768px) {
       nav {
@@ -265,14 +321,30 @@
         text-decoration: none;
         color: white;
       }
+      nav ul li a::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: white;
+        transition: width 0.3s ease;
+      }
+      nav ul li a:hover::after {
+        width: 100%;
+      }
       nav ul li a:hover,
       nav ul li a:focus-visible {
-        background-color: rgba(255 255 255 / 0.2);
-        text-decoration: underline;
+        background-color: rgba(255, 255, 255, 0.1);
+        text-decoration: none;
+        transform: translateY(-2px);
       }
     }
     section#tentang {
       padding: 5rem 1.5rem;
+      position: relative;
+      z-index: 1;
     }
     .hero-container {
       display: flex;
@@ -305,22 +377,55 @@
       font-size: 2.5rem;
       font-weight: 700;
       margin-bottom: 1.5rem;
-      color: #3730a3;
+      color: white;
       line-height: 1.1;
+      position: relative;
+      overflow: hidden;
     }
     .hero-text h2 span {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
+      position: relative;
+      display: inline-block;
+    }
+    .hero-text h2 span::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: #9ca3af; /* Gray-400 */
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: underline 1.5s ease forwards;
+      animation-delay: 0.5s;
+    }
+    @keyframes underline {
+      to {
+        transform: scaleX(1);
+      }
     }
     .hero-text p {
       font-size: 1.125rem;
       margin-bottom: 2rem;
-      color: #374151;
+      color: #d1d5db; /* Gray-300 */
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
     }
     .hero-buttons {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
       justify-content: center;
+      opacity: 0;
+      animation: fadeIn 1s ease forwards;
+      animation-delay: 0.6s;
     }
     @media (min-width: 768px) {
       .hero-buttons {
@@ -328,43 +433,85 @@
       }
     }
     .btn-primary {
-      background-color: #2563eb;
+      background-color: white;
+      color: #111827; /* Gray-900 */
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
+      user-select: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f3f4f6; /* Gray-100 */
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+    .btn-primary:hover::before {
+      transform: translateY(0);
+    }
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      outline: none;
+    }
+    .btn-primary:active {
+      transform: translateY(-1px);
+    }
+    .btn-secondary {
+      background-color: transparent;
       color: white;
       font-weight: 700;
       padding: 0.75rem 1.5rem;
       border-radius: 0.75rem;
-      box-shadow: 0 10px 15px -3px rgb(37 99 235 / 0.5);
-      transition: background-color 0.3s ease, transform 0.2s ease;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border: 2px solid #9ca3af; /* Gray-400 */
+      transition: all 0.3s ease;
       user-select: none;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
     }
-    .btn-primary:hover,
-    .btn-primary:focus-visible {
-      background-color: #1e40af;
-      outline: none;
-      transform: scale(1.05);
+    .btn-secondary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: -1;
     }
-    .btn-secondary {
-      background-color: white;
-      color: #2563eb;
-      font-weight: 700;
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 10px 15px -3px rgb(37 99 235 / 0.3);
-      border: 2px solid #2563eb;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      user-select: none;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .btn-secondary:hover::before {
+      transform: translateY(0);
     }
     .btn-secondary:hover,
     .btn-secondary:focus-visible {
-      background-color: #f3f4f6;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       outline: none;
-      transform: scale(1.05);
+    }
+    .btn-secondary:active {
+      transform: translateY(-1px);
     }
     .hero-image-wrapper {
       position: relative;
@@ -380,36 +527,65 @@
       left: 50%;
       width: 256px;
       height: 256px;
-      background-color: #2563eb;
+      background-color: #4b5563; /* Gray-600 */
       border-radius: 9999px;
       filter: blur(40px);
       opacity: 0.2;
       transform: translate(-50%, -50%);
       z-index: 0;
+      animation: pulse 3s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.2;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.3;
+      }
     }
     .hero-image {
       border-radius: 1rem;
-      box-shadow: 0 10px 30px rgb(37 99 235 / 0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       position: relative;
       z-index: 1;
       max-height: 384px;
       object-fit: cover;
       width: 100%;
       height: auto;
+      transition: transform 0.5s ease;
+    }
+    .hero-image:hover {
+      transform: scale(1.03);
     }
     section#menu-bot {
       padding: 4rem 1.5rem;
-      background-color: white;
+      background-color: #1f2937; /* Gray-800 */
+      position: relative;
+      z-index: 1;
     }
     section#menu-bot h2 {
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 3rem;
       text-align: center;
-      color: #2563eb;
+      color: white;
+      position: relative;
+      display: inline-block;
+    }
+    section#menu-bot h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: #9ca3af; /* Gray-400 */
     }
     section#menu-bot h2 span {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
     }
     .menu-grid {
       display: grid;
@@ -430,18 +606,36 @@
       }
     }
     .menu-card {
-      background: linear-gradient(135deg, #ebf4ff 0%, #e0e7ff 100%);
+      background-color: #374151; /* Gray-700 */
       padding: 1.5rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
-      transition: box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
       user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .menu-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background-color: #9ca3af; /* Gray-400 */
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .menu-card:hover::before {
+      transform: scaleX(1);
     }
     .menu-card:hover,
     .menu-card:focus-within {
-      box-shadow: 0 10px 15px rgb(0 0 0 / 0.2);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
       outline: none;
     }
     .menu-card-header {
@@ -451,8 +645,8 @@
       gap: 1rem;
     }
     .menu-icon {
-      background-color: #2563eb;
-      color: white;
+      background-color: #9ca3af; /* Gray-400 */
+      color: #111827; /* Gray-900 */
       padding: 0.75rem;
       border-radius: 0.75rem;
       font-size: 1.25rem;
@@ -462,15 +656,20 @@
       justify-content: center;
       width: 40px;
       height: 40px;
+      transition: all 0.3s ease;
+    }
+    .menu-card:hover .menu-icon {
+      transform: rotate(10deg) scale(1.1);
+      background-color: white;
     }
     .menu-card-header h3 {
       font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 0.25rem;
-      color: #1e40af;
+      color: white;
     }
     .menu-card-header p {
-      color: #374151;
+      color: #d1d5db; /* Gray-300 */
       font-size: 0.9375rem;
       line-height: 1.3;
     }
@@ -481,20 +680,38 @@
       width: 100%;
       margin-top: auto;
       user-select: none;
+      transition: transform 0.3s ease;
+    }
+    .menu-card:hover img {
+      transform: scale(1.05);
     }
     section#keunggulan {
       padding: 4rem 1.5rem;
-      background: linear-gradient(135deg, #e0e7ff 0%, #ebf4ff 100%);
+      background-color: #111827; /* Gray-900 */
+      position: relative;
+      z-index: 1;
     }
     section#keunggulan h2 {
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 3rem;
       text-align: center;
-      color: #2563eb;
+      color: white;
+      position: relative;
+      display: inline-block;
+    }
+    section#keunggulan h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: #9ca3af; /* Gray-400 */
     }
     section#keunggulan h2 span {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
     }
     .features-grid {
       display: grid;
@@ -510,50 +727,94 @@
       }
     }
     .feature-card {
-      background-color: white;
+      background-color: #1f2937; /* Gray-800 */
       padding: 1.5rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
-      transition: box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      transition: all 0.3s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+      transform: scale(0);
+      transition: transform 0.5s ease;
+      z-index: 0;
+    }
+    .feature-card:hover::before {
+      transform: scale(2);
     }
     .feature-card:hover,
     .feature-card:focus-within {
-      box-shadow: 0 10px 15px rgb(0 0 0 / 0.2);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
       outline: none;
     }
     .feature-icon {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
       font-size: 2.5rem;
       margin-bottom: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      z-index: 1;
+    }
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1);
+      color: white;
     }
     .feature-card h3 {
       font-size: 1.25rem;
       font-weight: 700;
       margin-bottom: 0.5rem;
-      color: #1e40af;
+      color: white;
+      position: relative;
+      z-index: 1;
     }
     .feature-card p {
-      color: #374151;
+      color: #d1d5db; /* Gray-300 */
       font-size: 1rem;
       line-height: 1.4;
+      position: relative;
+      z-index: 1;
     }
     section#paket {
       padding: 4rem 1.5rem;
+      background-color: #1f2937; /* Gray-800 */
+      position: relative;
+      z-index: 1;
     }
     section#paket h2 {
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 3rem;
       text-align: center;
-      color: #2563eb;
+      color: white;
+      position: relative;
+      display: inline-block;
+    }
+    section#paket h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: #9ca3af; /* Gray-400 */
     }
     section#paket h2 span {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
     }
     .paket-grid {
       display: grid;
@@ -569,49 +830,74 @@
       }
     }
     .card {
-      background-color: white;
+      background-color: #374151; /* Gray-700 */
       border-radius: 1rem;
-      box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       padding: 2rem;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      height: 400px;
+      height: 100%;
       cursor: default;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      transition: all 0.3s ease;
       user-select: none;
       position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+      transform: translateY(100%);
+      transition: transform 0.5s ease;
+      z-index: 0;
+    }
+    .card:hover::before {
+      transform: translateY(0);
     }
     .card:hover,
     .card:focus-within {
-      box-shadow: 0 10px 15px rgb(0 0 0 / 0.2);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       transform: translateY(-5px);
       outline: none;
     }
     .card.popular {
-      border: 2px solid #2563eb;
+      border: 2px solid #9ca3af; /* Gray-400 */
     }
     .card-header {
       text-align: center;
       margin-bottom: 1rem;
       position: relative;
+      z-index: 1;
     }
     .card-popular-label {
       position: absolute;
       top: -1.5rem;
       left: 50%;
       transform: translateX(-50%);
-      background-color: #2563eb;
-      color: white;
+      background-color: #9ca3af; /* Gray-400 */
+      color: #111827; /* Gray-900 */
       padding: 0.25rem 1rem;
       border-radius: 9999px;
       font-size: 0.75rem;
       font-weight: 700;
       user-select: none;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% {
+        transform: translateX(-50%) scale(1);
+      }
+      50% {
+        transform: translateX(-50%) scale(1.05);
+      }
     }
     .card-icon {
-      background-color: #2563eb;
-      color: white;
+      background-color: #9ca3af; /* Gray-400 */
+      color: #111827; /* Gray-900 */
       width: 64px;
       height: 64px;
       border-radius: 9999px;
@@ -621,53 +907,74 @@
       font-size: 1.5rem;
       margin: 0 auto 0.75rem auto;
       flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .card:hover .card-icon {
+      transform: scale(1.1);
+      background-color: white;
     }
     .price {
       font-size: 2.25rem;
       font-weight: 700;
-      color: #2563eb;
+      color: white;
       margin: 1rem 0 0.25rem 0;
       text-align: center;
       user-select: text;
+      position: relative;
+      z-index: 1;
     }
     .duration {
       text-align: center;
-      color: #4b5563;
+      color: #d1d5db; /* Gray-300 */
       font-weight: 600;
       user-select: text;
+      position: relative;
+      z-index: 1;
     }
     .description {
       text-align: center;
-      color: #6b7280;
+      color: #9ca3af; /* Gray-400 */
       margin-bottom: 1rem;
       user-select: text;
+      position: relative;
+      z-index: 1;
     }
     .benefits {
       list-style: none;
       padding-left: 0;
       margin-top: 1rem;
-      color: #374151;
+      color: #e5e7eb; /* Gray-200 */
       flex-grow: 1;
       overflow-y: auto;
       user-select: text;
+      position: relative;
+      z-index: 1;
     }
     .benefits li {
       margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+    .benefits li:hover {
+      transform: translateX(5px);
     }
     .benefits li i {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
       flex-shrink: 0;
       font-size: 1rem;
       line-height: 1;
+      transition: transform 0.2s ease;
+    }
+    .benefits li:hover i {
+      transform: scale(1.2);
     }
     .benefits::-webkit-scrollbar {
       width: 6px;
     }
     .benefits::-webkit-scrollbar-thumb {
-      background-color: rgba(37, 99, 235, 0.5);
+      background-color: rgba(156, 163, 175, 0.5); /* Gray-400 with opacity */
       border-radius: 3px;
     }
     .benefits::-webkit-scrollbar-track {
@@ -675,7 +982,7 @@
     }
     .benefits {
       scrollbar-width: thin;
-      scrollbar-color: rgba(37, 99, 235, 0.5) transparent;
+      scrollbar-color: rgba(156, 163, 175, 0.5) transparent; /* Gray-400 with opacity */
     }
     @supports (-ms-overflow-style: none) {
       .benefits {
@@ -683,38 +990,74 @@
       }
     }
     .btn-order {
-      background-color: #2563eb;
-      color: white;
+      background-color: white;
+      color: #111827; /* Gray-900 */
       font-weight: 700;
       padding: 0.5rem 1.5rem;
       border-radius: 0.75rem;
       text-align: center;
-      margin-top: 1rem;
-      transition: background-color 0.3s ease;
+      margin-top: auto;
+      transition: all 0.3s ease;
       display: block;
       width: fit-content;
       margin-left: auto;
       margin-right: auto;
       user-select: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .btn-order::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #f3f4f6; /* Gray-100 */
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: -1;
+    }
+    .btn-order:hover::before {
+      transform: translateY(0);
     }
     .btn-order:hover,
     .btn-order:focus-visible {
-      background-color: #1e40af;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       outline: none;
+    }
+    .btn-order:active {
+      transform: translateY(-1px);
     }
     section.testimonial-section {
       padding: 4rem 1.5rem;
-      background-color: white;
+      background-color: #111827; /* Gray-900 */
+      position: relative;
+      z-index: 1;
     }
     section.testimonial-section h2 {
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 3rem;
       text-align: center;
-      color: #2563eb;
+      color: white;
+      position: relative;
+      display: inline-block;
+    }
+    section.testimonial-section h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: #9ca3af; /* Gray-400 */
     }
     section.testimonial-section h2 span {
-      color: #2563eb;
+      color: #9ca3af; /* Gray-400 */
     }
     .testimonial-grid {
       display: grid;
@@ -730,19 +1073,39 @@
       }
     }
     .testimonial-card {
-      background: linear-gradient(135deg, #ebf4ff 0%, #e0e7ff 100%);
+      background-color: #1f2937; /* Gray-800 */
       padding: 1.5rem;
       border-radius: 1rem;
-      box-shadow: 0 4px 6px rgb(0 0 0 / 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       user-select: none;
       display: flex;
       flex-direction: column;
       gap: 1rem;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: -20px;
+      left: 10px;
+      font-size: 100px;
+      color: rgba(255, 255, 255, 0.1);
+      font-family: serif;
+    }
+    .testimonial-card:hover,
+    .testimonial-card:focus-within {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-5px);
+      outline: none;
     }
     .testimonial-header {
       display: flex;
       align-items: center;
       gap: 1rem;
+      position: relative;
+      z-index: 1;
     }
     .testimonial-header img {
       width: 48px;
@@ -750,49 +1113,90 @@
       border-radius: 9999px;
       object-fit: cover;
       flex-shrink: 0;
+      transition: transform 0.3s ease;
+    }
+    .testimonial-card:hover .testimonial-header img {
+      transform: scale(1.1);
     }
     .testimonial-header h4 {
       font-weight: 700;
       font-size: 1rem;
       margin: 0;
-      color: #1e40af;
+      color: white;
     }
     .testimonial-header p {
       font-size: 0.875rem;
-      color: #4b5563;
+      color: #9ca3af; /* Gray-400 */
       margin: 0;
       user-select: text;
     }
     .testimonial-text {
-      color: #374151;
+      color: #e5e7eb; /* Gray-200 */
       font-size: 1rem;
       line-height: 1.4;
       user-select: text;
       flex-grow: 1;
+      position: relative;
+      z-index: 1;
     }
     .testimonial-stars {
-      color: #fbbf24;
+      color: #fbbf24; /* Yellow for stars */
       font-size: 1.25rem;
       display: flex;
       gap: 0.25rem;
       user-select: none;
+      position: relative;
+      z-index: 1;
+    }
+    .testimonial-stars i {
+      transition: transform 0.2s ease;
+    }
+    .testimonial-stars i:hover {
+      transform: scale(1.2);
     }
     section#kontak {
       padding: 4rem 1.5rem;
-      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      background-color: #1f2937; /* Gray-800 */
       color: white;
       user-select: none;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    section#kontak::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      z-index: 0;
     }
     section#kontak .container {
       max-width: 900px;
       margin-left: auto;
       margin-right: auto;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
     section#kontak h2 {
       font-size: 2rem;
       font-weight: 700;
       margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    section#kontak h2::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background-color: #9ca3af; /* Gray-400 */
     }
     section#kontak p.lead {
       font-size: 1.25rem;
@@ -800,7 +1204,7 @@
       max-width: 600px;
       margin-left: auto;
       margin-right: auto;
-      color: #d1d5db;
+      color: #e5e7eb; /* Gray-200 */
     }
     .contact-buttons {
       display: flex;
@@ -817,48 +1221,115 @@
       }
     }
     .btn-whatsapp {
-      background-color: white;
-      color: #2563eb;
-      font-weight: 700;
-      padding: 0.75rem 2rem;
-      border-radius: 0.75rem;
-      box-shadow: 0 10px 15px rgb(255 255 255 / 0.5);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      transition: background-color 0.3s ease;
-      user-select: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn-whatsapp:hover,
-    .btn-whatsapp:focus-visible {
-      background-color: #e0e7ff;
-      outline: none;
-    }
-    .btn-email {
-      background-color: #3b82f6;
+      background-color: #25d366; /* WhatsApp green */
       color: white;
       font-weight: 700;
       padding: 0.75rem 2rem;
       border-radius: 0.75rem;
-      box-shadow: 0 10px 15px rgb(59 130 246 / 0.5);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
       user-select: none;
       border: none;
       cursor: pointer;
       text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-whatsapp::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #128c7e; /* Darker green */
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 0;
+    }
+    .btn-whatsapp:hover::before {
+      transform: translateY(0);
+    }
+    .btn-whatsapp i {
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    .btn-whatsapp:hover i {
+      transform: scale(1.2);
+    }
+    .btn-whatsapp span {
+      position: relative;
+      z-index: 1;
+    }
+    .btn-whatsapp:hover,
+    .btn-whatsapp:focus-visible {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      outline: none;
+    }
+    .btn-whatsapp:active {
+      transform: translateY(-1px);
+    }
+    .btn-email {
+      background-color: transparent;
+      color: white;
+      font-weight: 700;
+      padding: 0.75rem 2rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border: 2px solid #9ca3af; /* Gray-400 */
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      user-select: none;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-email::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 0;
+    }
+    .btn-email:hover::before {
+      transform: translateY(0);
+    }
+    .btn-email i {
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+    .btn-email:hover i {
+      transform: scale(1.2);
+    }
+    .btn-email span {
+      position: relative;
+      z-index: 1;
     }
     .btn-email:hover,
     .btn-email:focus-visible {
-      background-color: #2563eb;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
       outline: none;
+    }
+    .btn-email:active {
+      transform: translateY(-1px);
     }
     .contact-info {
       margin-top: 3rem;
@@ -866,8 +1337,10 @@
       margin-left: auto;
       margin-right: auto;
       text-align: left;
-      color: #d1d5db;
+      color: #e5e7eb; /* Gray-200 */
       user-select: text;
+      position: relative;
+      z-index: 1;
     }
     .contact-info h3 {
       font-size: 1.25rem;
@@ -881,23 +1354,115 @@
       align-items: center;
       gap: 0.5rem;
       font-size: 1rem;
+      transition: transform 0.2s ease;
+    }
+    .contact-info p:hover {
+      transform: translateX(5px);
     }
     .contact-info p i {
       min-width: 20px;
       text-align: center;
-      color: #93c5fd;
+      color: #9ca3af; /* Gray-400 */
       flex-shrink: 0;
+      transition: transform 0.2s ease;
+    }
+    .contact-info p:hover i {
+      transform: scale(1.2);
+    }
+    /* Loading animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #111827; /* Gray-900 */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loader-circle {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #374151; /* Gray-700 */
+      border-top: 5px solid white;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Scroll to top button */
+    .scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      background-color: #374151; /* Gray-700 */
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 100;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    .scroll-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    .scroll-top:hover {
+      background-color: #9ca3af; /* Gray-400 */
+      transform: translateY(-5px);
+    }
+    .scroll-top:active {
+      transform: translateY(-2px);
+    }
+    /* Particles.js container */
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      background-color: #111827; /* Gray-900 */
     }
   </style>
 </head>
 <body>
-  <header>
+  <!-- Particles.js container -->
+  <div id="particles-js"></div>
+
+  <!-- Loading animation -->
+  <div class="loader" id="loader">
+    <div class="loader-circle"></div>
+  </div>
+
+  <!-- Scroll to top button -->
+  <div class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+  </div>
+
+  <header id="header">
     <div class="container">
       <div class="logo-wrapper">
         <div class="logo-bg">
-          <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749312952891.jpeg" width="100" height="100" />
+          <img src="https://i.pinimg.com/originals/1e/b0/5f/1eb05f325ec50a15c8b045f3428d6d5e.png" width="100" height="100" />
         </div>
-        <h1> SEWA BOT TAKINA</h1>
+        <h1> Yuzuriha Assistant</h1>
       </div>
       <button id="burgerBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
         <i class="fas fa-bars" aria-hidden="true"></i>
@@ -916,25 +1481,25 @@
 
   <section id="tentang" aria-label="Tentang Bot WhatsApp Premium">
     <div class="hero-container">
-      <div class="hero-text">
-        <h2>Bot WhatsApp <span>Premium</span></h2>
-        <p>Bot WhatsApp multifungsi dengan teknologi terkini. Sempurnakan grup dan bisnis Anda dengan fitur otomatis, hiburan, admin tools, dan AI assistant.</p>
+      <div class="hero-text" data-aos="fade-right">
+        <h2>Yuzuriha <span>WhatsApp Bot</span></h2>
+        <p>Yuzuriha Assistant adalah Bot WhatsApp multifungsi dengan teknologi terkini. Sempurnakan grup dan bisnis Anda dengan fitur otomatis, hiburan, admin tools, dan AI assistant.</p>
         <div class="hero-buttons">
           <a href="#paket" class="btn-primary">Lihat Paket</a>
-          <a href="#demo" class="btn-secondary">Demo Bot</a>
+          <a href="https://chat.whatsapp.com/Jmol4sl3VGA6f5gjmExkWK" target="_blank" rel="noopener" class="btn-secondary">Demo Bot</a>
         </div>
       </div>
-      <div class="hero-image-wrapper" aria-hidden="true">
+      <div class="hero-image-wrapper" aria-hidden="true" data-aos="fade-left">
         <div class="hero-image-glow"></div>
-        <img class="hero-image" src="https://files.catbox.moe/gkrtt5.jpg" width="300" height="600" />
+        <img class="hero-image" src="https://i.pinimg.com/originals/1b/bf/66/1bbf66d389f9d7610b9d0c1a3f486f60.png" width="300" height="600" />
       </div>
     </div>
   </section>
 
   <section id="menu-bot" aria-label="Menu Bot Premium">
-    <h2>Menu Bot <span>Premium</span></h2>
+    <h2 data-aos="fade-up">Populer <span>Feature</span></h2>
     <div class="menu-grid">
-      <article class="menu-card" tabindex="0">
+      <article class="menu-card" tabindex="0" data-aos="fade-up" data-aos-delay="100">
         <div class="menu-card-header">
           <div class="menu-icon"><i class="fas fa-robot" aria-hidden="true"></i></div>
           <div>
@@ -944,7 +1509,7 @@
         </div>
         <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749310618422.jpeg" width="400" height="200" />
       </article>
-      <article class="menu-card" tabindex="0">
+      <article class="menu-card" tabindex="0" data-aos="fade-up" data-aos-delay="200">
         <div class="menu-card-header">
           <div class="menu-icon"><i class="fas fa-download" aria-hidden="true"></i></div>
           <div>
@@ -954,7 +1519,7 @@
         </div>
         <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749310665110.jpeg" width="400" height="200" />
       </article>
-      <article class="menu-card" tabindex="0">
+      <article class="menu-card" tabindex="0" data-aos="fade-up" data-aos-delay="300">
         <div class="menu-card-header">
           <div class="menu-icon"><i class="fas fa-brain" aria-hidden="true"></i></div>
           <div>
@@ -964,7 +1529,7 @@
         </div>
         <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749310714676.jpeg" width="400" height="200" />
       </article>
-      <article class="menu-card" tabindex="0">
+      <article class="menu-card" tabindex="0" data-aos="fade-up" data-aos-delay="400">
         <div class="menu-card-header">
           <div class="menu-icon"><i class="fas fa-gamepad" aria-hidden="true"></i></div>
           <div>
@@ -974,7 +1539,7 @@
         </div>
         <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749310765589.jpeg" width="400" height="200" />
       </article>
-      <article class="menu-card" tabindex="0">
+      <article class="menu-card" tabindex="0" data-aos="fade-up" data-aos-delay="500">
         <div class="menu-card-header">
           <div class="menu-icon"><i class="fas fa-user-shield" aria-hidden="true"></i></div>
           <div>
@@ -982,9 +1547,9 @@
             <p>Tools untuk admin grup seperti kick, add, promote, dan pengaturan grup lainnya.</p>
           </div>
         </div>
-        <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749310883409.jpeg" width="400" height="200" />
+        <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1761981497644.jpeg" width="400" height="200" />
       </article>
-      <article class="menu-card" tabindex="0">
+      <article class="menu-card" tabindex="0" data-aos="fade-up" data-aos-delay="600">
         <div class="menu-card-header">
           <div class="menu-icon"><i class="fas fa-image" aria-hidden="true"></i></div>
           <div>
@@ -998,34 +1563,34 @@
   </section>
 
   <section id="keunggulan" aria-label="Keunggulan Bot Premium">
-    <h2>Keunggulan Bot <span>Premium</span></h2>
+    <h2 data-aos="fade-up">Keunggulan WhatsApp Bot <span>Yuzuriha</span></h2>
     <div class="features-grid">
-      <article class="feature-card" tabindex="0">
+      <article class="feature-card" tabindex="0" data-aos="zoom-in" data-aos-delay="100">
         <div class="feature-icon"><i class="fas fa-server" aria-hidden="true"></i></div>
         <h3>Stabil & Cepat</h3>
         <p>Online 24/7 nonstop dengan server premium. Response time cepat tanpa delay.</p>
       </article>
-      <article class="feature-card" tabindex="0">
+      <article class="feature-card" tabindex="0" data-aos="zoom-in" data-aos-delay="200">
         <div class="feature-icon"><i class="fas fa-tools" aria-hidden="true"></i></div>
         <h3>Banyak Fitur</h3>
         <p>Lebih dari 100 fitur yang terus diupdate. Dari hiburan, tools, hingga AI.</p>
       </article>
-      <article class="feature-card" tabindex="0">
+      <article class="feature-card" tabindex="0" data-aos="zoom-in" data-aos-delay="300">
         <div class="feature-icon"><i class="fas fa-headset" aria-hidden="true"></i></div>
         <h3>Support 24/7</h3>
         <p>Tim support aktif membantu setup, masalah teknis, dan update fitur baru.</p>
       </article>
-      <article class="feature-card" tabindex="0">
+      <article class="feature-card" tabindex="0" data-aos="zoom-in" data-aos-delay="400">
         <div class="feature-icon"><i class="fas fa-shield-alt" aria-hidden="true"></i></div>
         <h3>Anti Banned</h3>
         <p>Sistem anti-banned dan auto-reconnect saat terjadi gangguan.</p>
       </article>
-      <article class="feature-card" tabindex="0">
+      <article class="feature-card" tabindex="0" data-aos="zoom-in" data-aos-delay="500">
         <div class="feature-icon"><i class="fas fa-sync" aria-hidden="true"></i></div>
         <h3>Update Rutin</h3>
         <p>Update mingguan untuk fitur baru dan peningkatan performa.</p>
       </article>
-      <article class="feature-card" tabindex="0">
+      <article class="feature-card" tabindex="0" data-aos="zoom-in" data-aos-delay="600">
         <div class="feature-icon"><i class="fas fa-cogs" aria-hidden="true"></i></div>
         <h3>Custom Fitur</h3>
         <p>Request fitur custom sesuai kebutuhan spesifik Anda.</p>
@@ -1034,16 +1599,16 @@
   </section>
 
   <section id="paket" aria-label="Paket Harga Bot WhatsApp Premium">
-    <h2>Paket <span>Harga</span></h2>
+    <h2 data-aos="fade-up">Paket <span>Harga</span></h2>
     <div class="paket-grid">
-      <article class="card" tabindex="0">
+      <article class="card" tabindex="0" data-aos="flip-left" data-aos-delay="100">
         <div class="card-header">
           <div class="card-icon" aria-hidden="true"><i class="fas fa-calendar-week"></i></div>
           <h3>Paket Mingguan</h3>
           <p class="duration">7 hari penggunaan penuh</p>
         </div>
         <p class="price">Rp8.000</p>
-        <p class="description">Cocok untuk event singkat</p>
+        <p class="description">Cocok untuk Event singkat, webinar, kelas online sementara, open recruitment </p>
         <ul class="benefits" aria-label="Manfaat Paket Mingguan">
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Akses semua fitur dasar</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Support 24/7</li>
@@ -1053,7 +1618,7 @@
         </ul>
         <a href="#kontak" class="btn-order">Pesan Sekarang</a>
       </article>
-      <article class="card popular" tabindex="0">
+      <article class="card popular" tabindex="0" data-aos="flip-left" data-aos-delay="200">
         <div class="card-header">
           <div class="card-popular-label" aria-label="Terpopuler Paket">Terpopuler</div>
           <div class="card-icon" aria-hidden="true"><i class="fas fa-calendar-alt"></i></div>
@@ -1061,7 +1626,7 @@
           <p class="duration">30 hari penggunaan penuh</p>
         </div>
         <p class="price">Rp15.000</p>
-        <p class="description">Paling direkomendasikan</p>
+        <p class="description">Cocok untuk Komunitas kecil, keluarga, group belajar, group hobi</p>
         <ul class="benefits" aria-label="Manfaat Paket Bulanan">
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Akses semua fitur premium</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Support 24/7 prioritas</li>
@@ -1072,16 +1637,15 @@
         </ul>
         <a href="#kontak" class="btn-order">Pesan Sekarang</a>
       </article>
-      <article class="card popular" tabindex="0">
+      <article class="card" tabindex="0" data-aos="flip-left" data-aos-delay="300">
         <div class="card-header">
-          <div class="card-popular-label" aria-label="Terpopuler Paket">Terpopuler</div>
           <div class="card-icon" aria-hidden="true"><i class="fas fa-calendar-alt"></i></div>
-          <h3>Paket Bulanan</h3>
+          <h3>Paket 2 Bulan</h3>
           <p class="duration">60 hari penggunaan penuh</p>
         </div>
         <p class="price">Rp30.000</p>
-        <p class="description">Paling direkomendasikan</p>
-        <ul class="benefits" aria-label="Manfaat Paket Bulanan">
+        <p class="description">Cocok untuk Komunitas aktif, sekolah, fans club, group jual beli</p>
+        <ul class="benefits" aria-label="Manfaat Paket 2 Bulan">
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Akses semua fitur premium</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Support 24/7 prioritas</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Update fitur mingguan</li>
@@ -1091,16 +1655,15 @@
         </ul>
         <a href="#kontak" class="btn-order">Pesan Sekarang</a>
       </article>
-      <article class="card popular" tabindex="0">
+      <article class="card" tabindex="0" data-aos="flip-left" data-aos-delay="400">
         <div class="card-header">
-          <div class="card-popular-label" aria-label="Terpopuler Paket">Terpopuler</div>
           <div class="card-icon" aria-hidden="true"><i class="fas fa-calendar-alt"></i></div>
-          <h3>Paket Bulanan</h3>
+          <h3>Paket 3 Bulan</h3>
           <p class="duration">90 hari penggunaan penuh</p>
         </div>
         <p class="price">Rp45.000</p>
-        <p class="description">Paling direkomendasikan</p>
-        <ul class="benefits" aria-label="Manfaat Paket Bulanan">
+        <p class="description">Cocok untuk Komunitas besar, organisasi, group bisnis, event rutin</p>
+        <ul class="benefits" aria-label="Manfaat Paket 3 Bulan">
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Akses semua fitur premium</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Support 24/7 prioritas</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Update fitur mingguan</li>
@@ -1110,16 +1673,15 @@
         </ul>
         <a href="#kontak" class="btn-order">Pesan Sekarang</a>
       </article>
-      <article class="card popular" tabindex="0">
+      <article class="card" tabindex="0" data-aos="flip-left" data-aos-delay="500">
         <div class="card-header">
-          <div class="card-popular-label" aria-label="Terpopuler Paket">Terpopuler</div>
           <div class="card-icon" aria-hidden="true"><i class="fas fa-calendar-alt"></i></div>
-          <h3>Paket Bulanan</h3>
+          <h3>Paket 4 Bulan</h3>
           <p class="duration">120 hari penggunaan penuh</p>
         </div>
         <p class="price">Rp60.000</p>
-        <p class="description">Paling direkomendasikan</p>
-        <ul class="benefits" aria-label="Manfaat Paket Bulanan">
+        <p class="description">Cocok untuk Yang ingin hemat untuk jangka panjang</p>
+        <ul class="benefits" aria-label="Manfaat Paket 4 Bulan">
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Akses semua fitur premium</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Support 24/7 prioritas</li>
           <li><i class="fas fa-check-circle" aria-hidden="true"></i>Update fitur mingguan</li>
@@ -1129,7 +1691,7 @@
         </ul>
         <a href="#kontak" class="btn-order">Pesan Sekarang</a>
       </article>
-      <article class="card" tabindex="0">
+      <article class="card" tabindex="0" data-aos="flip-left" data-aos-delay="600">
         <div class="card-header">
           <div class="card-icon" aria-hidden="true"><i class="fas fa-calendar-check"></i></div>
           <h3>Paket Tahunan</h3>
@@ -1152,14 +1714,14 @@
   </section>
 
   <section class="testimonial-section" aria-label="Testimonial Pengguna">
-    <h2>Apa Kata <span>Mereka?</span></h2>
+    <h2 data-aos="fade-up">Apa Kata <span>Mereka?</span></h2>
     <div class="testimonial-grid">
-      <article class="testimonial-card" tabindex="0">
+      <article class="testimonial-card" tabindex="0" data-aos="fade-up" data-aos-delay="100">
         <div class="testimonial-header">
           <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749311053288.jpeg" width="50" height="50" />
           <div>
-            <h4>Salman Jomok</h4>
-            <p>Beban</p>
+            <h4>Putri</h4>
+            <p>Customer 1</p>
           </div>
         </div>
         <p class="testimonial-text">"Bot ini sangat membantu untuk manajemen grup gaming saya. Fitur admin tools dan hiburannya bikin member betah!"</p>
@@ -1171,12 +1733,12 @@
           <i class="fas fa-star" aria-hidden="true"></i>
         </div>
       </article>
-      <article class="testimonial-card" tabindex="0">
+      <article class="testimonial-card" tabindex="0" data-aos="fade-up" data-aos-delay="200">
         <div class="testimonial-header">
           <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749311053288.jpeg" width="50" height="50" />
           <div>
-            <h4>Fiki laknat</h4>
-            <p>Owner Beta</p>
+            <h4>Irfandi</h4>
+            <p>Customer 2</p>
           </div>
         </div>
         <p class="testimonial-text">"Responsif banget! Tim supportnya ramah dan selalu siap membantu. Auto-respon bikin komunikasi di grup jadi lebih efektif."</p>
@@ -1188,12 +1750,12 @@
           <i class="fas fa-star-half-alt" aria-hidden="true"></i>
         </div>
       </article>
-      <article class="testimonial-card" tabindex="0">
+      <article class="testimonial-card" tabindex="0" data-aos="fade-up" data-aos-delay="300">
         <div class="testimonial-header">
           <img src="https://raw.githubusercontent.com/Fiisya/uploads/main/uploads/1749311053288.jpeg" width="50" height="50" />
           <div>
-            <h4>kenn kntl</h4>
-            <p>Beban</p>
+            <h4>Faisal</h4>
+            <p>Customer 3</p>
           </div>
         </div>
         <p class="testimonial-text">"Sempurna untuk bisnis online saya. Fitur auto-respon membantu jawab FAQ customer, jadi bisa fokus ke orderan yang lebih penting."</p>
@@ -1210,29 +1772,178 @@
 
   <section id="kontak" aria-label="Kontak dan Call to Action">
     <div class="container">
-      <h2>Siap Upgrade Grup WhatsApp Anda?</h2>
-      <p class="lead">Hubungi kami sekarang dan nikmati pengalaman WhatsApp yang lebih baik dengan Bot Premium kami.</p>
-      <div class="contact-buttons">
-        <a href="https://wa.me/62895615063060?text=hallo+tod+saya+mau+sewa+bot" target="_blank" rel="noopener" class="btn-whatsapp" aria-label="Chat WhatsApp">
-          <i class="fab fa-whatsapp" aria-hidden="true" style="font-size: 1.5rem;"></i> Chat WhatsApp
+      <h2 data-aos="fade-up">Siap Upgrade Grup WhatsApp Anda?</h2>
+      <p class="lead" data-aos="fade-up" data-aos-delay="100">Hubungi kami sekarang dan nikmati pengalaman WhatsApp yang lebih baik dengan Bot Premium kami.</p>
+      <div class="contact-buttons" data-aos="fade-up" data-aos-delay="200">
+        <a href="https://wa.me/62895615063060?text=hallo+kak+saya+mau+sewa+bot" target="_blank" rel="noopener" class="btn-whatsapp" aria-label="Chat WhatsApp">
+          <i class="fab fa-whatsapp" aria-hidden="true" style="font-size: 1.5rem;"></i> <span>Chat WhatsApp</span>
         </a>
         <a href="mailto:asistenawaktop@gmail.com" class="btn-email" aria-label="Kirim Email">
-          <i class="fas fa-envelope" aria-hidden="true" style="font-size: 1.25rem;"></i> Kirim Email
+          <i class="fas fa-envelope" aria-hidden="true" style="font-size: 1.25rem;"></i> <span>Kirim Email</span>
         </a>
       </div>
-      <div class="contact-info">
+      <div class="contact-info" data-aos="fade-up" data-aos-delay="300">
         <h3>Kontak Kami</h3>
         <p><i class="fas fa-phone-alt" aria-hidden="true"></i> +62 895-6150-63060</p>
         <p><i class="fas fa-envelope" aria-hidden="true"></i> asistenawaktop@gmail.com</p>
-        <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Jl. makmur No. 123, Jakarta, Indonesia</p>
+        <p><i class="fas fa-map-marker-alt" aria-hidden="true"></i> Jl. Sim No. 123, Aceh, Indonesia</p>
       </div>
     </div>
   </section>
 
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <!-- Particles.js JS -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
   <script>
+    // Initialize AOS
+    AOS.init({
+      duration: 800,
+      once: true,
+      offset: 100
+    });
+
+    // Initialize Particles.js
+    particlesJS('particles-js', {
+      "particles": {
+        "number": {
+          "value": 50,
+          "density": {
+            "enable": true,
+            "value_area": 800
+          }
+        },
+        "color": {
+          "value": "#ffffff" /* White */
+        },
+        "shape": {
+          "type": "circle",
+          "stroke": {
+            "width": 0,
+            "color": "#000000"
+          }
+        },
+        "opacity": {
+          "value": 0.3,
+          "random": false,
+          "anim": {
+            "enable": false,
+            "speed": 1,
+            "opacity_min": 0.1,
+            "sync": false
+          }
+        },
+        "size": {
+          "value": 2,
+          "random": true,
+          "anim": {
+            "enable": false,
+            "speed": 40,
+            "size_min": 0.1,
+            "sync": false
+          }
+        },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#ffffff", /* White */
+          "opacity": 0.2,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 1,
+          "direction": "none",
+          "random": false,
+          "straight": false,
+          "out_mode": "out",
+          "bounce": false,
+          "attract": {
+            "enable": false,
+            "rotateX": 600,
+            "rotateY": 1200
+          }
+        }
+      },
+      "interactivity": {
+        "detect_on": "canvas",
+        "events": {
+          "onhover": {
+            "enable": true,
+            "mode": "repulse"
+          },
+          "onclick": {
+            "enable": true,
+            "mode": "push"
+          },
+          "resize": true
+        },
+        "modes": {
+          "grab": {
+            "distance": 400,
+            "line_linked": {
+              "opacity": 1
+            }
+          },
+          "bubble": {
+            "distance": 400,
+            "size": 40,
+            "duration": 2,
+            "opacity": 8,
+            "speed": 3
+          },
+          "repulse": {
+            "distance": 100,
+            "duration": 0.4
+          },
+          "push": {
+            "particles_nb": 4
+          },
+          "remove": {
+            "particles_nb": 2
+          }
+        }
+      },
+      "retina_detect": true
+    });
+
+    // Hide loader when page is fully loaded
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+      }, 500);
+    });
+
+    // Header scroll effect
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Scroll to top button
+    const scrollTop = document.getElementById('scrollTop');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 300) {
+        scrollTop.classList.add('visible');
+      } else {
+        scrollTop.classList.remove('visible');
+      }
+    });
+
+    scrollTop.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+
+    // Mobile menu toggle
     const burgerBtn = document.getElementById('burgerBtn');
     const navMenu = document.getElementById('navMenu');
-//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+
     function closeMenu() {
       navMenu.classList.remove('open');
       burgerBtn.setAttribute('aria-expanded', 'false');
@@ -1243,7 +1954,7 @@
       burgerBtn.setAttribute('aria-expanded', 'true');
       burgerBtn.innerHTML = '<i class="fas fa-times" aria-hidden="true"></i>';
     }
-//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+
     burgerBtn.addEventListener('click', () => {
       if (navMenu.classList.contains('open')) {
         closeMenu();
@@ -1251,7 +1962,7 @@
         openMenu();
       }
     });
-//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+
     navMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
         if (window.innerWidth < 768) {
@@ -1259,13 +1970,27 @@
         }
       });
     });
-//chanell:https://whatsapp.com/channel/0029VanrndJICVfcrjFr3x2R//
+
     window.addEventListener('resize', () => {
       if (window.innerWidth >= 768) {
         navMenu.classList.remove('open');
         burgerBtn.setAttribute('aria-expanded', 'false');
         burgerBtn.innerHTML = '<i class="fas fa-bars" aria-hidden="true"></i>';
       }
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
     });
   </script>
 </body>
